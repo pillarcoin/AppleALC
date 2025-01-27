@@ -1,0 +1,56 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      codec:
+        description: "声卡型号 (例如: ALC897)"
+        required: true
+        type: string
+        default: "ALC897"
+
+env:
+  PROJECT_TYPE: KEXT
+
+jobs:
+  build:
+    name: Build AppleALC
+    runs-on: macos-latest
+    env:
+      JOB_TYPE: BUILD
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: acidanthera/MacKernelSDK
+          path: MacKernelSDK
+      - name: CI Bootstrap
+        run: |
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
+      - name: Lilu Bootstrap
+        run: |
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
+
+      - name: Simplify codec
+        run: |
+          mv Resources Resources_bak
+          mkdir Resources
+          mv Resources_bak/PinConfigs.kext Resources
+          mv Resources_bak/Controllers.plist Resources
+          mv Resources_bak/Kexts.plist Resources
+          mv Resources_bak/Vendors.plist Resources
+
+          # Check
+          if [ ! -d "Resources_bak/${{ inputs.codec }}" ]; then
+            echo "Error: Codec ${{ inputs.codec }} not found!"
+            exit 1
+          fi
+
+          # Move
+          mv Resources_bak/${{ inputs.codec }} Resources
+      - run: xcodebuild -jobs 1 -configuration Release -arch x86_64
+      - name: Upload to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: build/*/*.zip
