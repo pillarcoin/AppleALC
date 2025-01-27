@@ -1,0 +1,8 @@
+[    3.649860] snd_hda_codec_realtek hdaudioC0D0: autoconfig for ALC897: line_outs=1 (0x14/0x0/0x0/0x0/0x0) type:line
+[    3.649863] snd_hda_codec_realtek hdaudioC0D0:    speaker_outs=0 (0x0/0x0/0x0/0x0/0x0)
+[    3.649864] snd_hda_codec_realtek hdaudioC0D0:    hp_outs=1 (0x1b/0x0/0x0/0x0/0x0)
+[    3.649865] snd_hda_codec_realtek hdaudioC0D0:    mono: mono_out=0x0
+[    3.649866] snd_hda_codec_realtek hdaudioC0D0:    inputs:
+[    3.649867] snd_hda_codec_realtek hdaudioC0D0:      Front Mic=0x19
+[    3.649868] snd_hda_codec_realtek hdaudioC0D0:      Rear Mic=0x18
+[    3.649868] snd_hda_codec_realtek hdaudioC0D0:      Line=0x1a
